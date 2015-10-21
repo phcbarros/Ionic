@@ -23,4 +23,20 @@ angular.module('starter', ['ionic'])
       StatusBar.styleDefault();
     }
   });
+})
+
+.config(function($stateProvider, $urlRouterProvider){
+  $stateProvider
+    .state('header', {
+      url:'/header',
+      templateUrl: '/app/header/header.html',
+      controller: 'HeaderCtrl'
+    })
+    .state('subheader', {
+      url:'/subheader',
+      templateUrl: '/app/subheader/subheader.html',
+      controller: 'SubHeaderCtrl'
+    });
+    
+   $urlRouterProvider.otherwise('/header');
 });
