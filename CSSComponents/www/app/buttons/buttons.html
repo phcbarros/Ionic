@@ -1,0 +1,10 @@
+<div class="bar bar-header bar-stable">
+	<h1 class="title">Buttons</h1>
+</div>
+<ion-content class="buttons">
+	<div ng-repeat="button in buttons track by $index">
+		<button type="button" class="button" ng-class="button.tipo">
+			{{button.tipo}}
+		</button>	
+	</div>
+</ion-content>

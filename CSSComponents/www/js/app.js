@@ -6,6 +6,8 @@
 angular.module('starter', ['ionic'])
 
 .run(function($ionicPlatform) {
+  'use strict';
+  
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs).
@@ -36,6 +38,16 @@ angular.module('starter', ['ionic'])
       url:'/subheader',
       templateUrl: '/app/subheader/subheader.html',
       controller: 'SubHeaderCtrl'
+    })
+    .state('footer', {
+      url: '/footer',
+      templateUrl: '/app/footer/footer.html',
+      controller: 'FooterCtrl'
+    })
+    .state('buttons',{
+      url: '/buttons',
+      templateUrl: '/app/buttons/buttons.html',
+      controller: 'ButtonsCtrl'
     });
     
    $urlRouterProvider.otherwise('/header');
