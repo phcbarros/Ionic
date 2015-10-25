@@ -126,3 +126,5 @@ gulp.task('buildHom', function(){
   runSequence(
     'build','min');
 });
+
+gulp.task('default', ['build']);

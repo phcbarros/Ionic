@@ -1,7 +1,15 @@
 .buttons {
-  margin-top: 4em;
+  background-color: #ccc;
 }
-.buttons div {
+.buttons .div,
+.buttons .outros,
+.buttons a {
+  padding-top: 0.5em;
+  padding-right: 1em;
   padding-left: 1em;
+  padding-bottom: 0.5em;
+}
+.buttons .div:last-child {
+  padding: 0;
   padding-bottom: 0.5em;
 }
