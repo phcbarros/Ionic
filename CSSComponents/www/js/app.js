@@ -48,6 +48,11 @@ angular.module('starter', ['ionic'])
       url: '/buttons',
       templateUrl: '/app/buttons/buttons.html',
       controller: 'ButtonsCtrl'
+    })
+    .state('list', {
+      url: '/list',
+      templateUrl: '/app/list/list.html',
+      controller: 'ListCtrl'
     });
     
    $urlRouterProvider.otherwise('/header');

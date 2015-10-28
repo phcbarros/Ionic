@@ -13,3 +13,8 @@
   padding: 0;
   padding-bottom: 0.5em;
 }
+
+.list h2 {
+  padding: .5em;
+  background-color: #ccc;
+}

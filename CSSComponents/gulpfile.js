@@ -73,6 +73,10 @@ gulp.task('clean less', function(){
 gulp.task('clean js', function(){
   del('./www/dist/*.js');
 });
+
+gulp.task('clean img', function(){
+  del('./www/dist/*.jpg');
+})
    
 gulp.task('compile less', ['clean less'], function(){
   return gulp.src(filesLess)
@@ -90,6 +94,11 @@ gulp.task('compile js', ['clean js', 'lint'], function(){
     .pipe(concat('./app/dist'))
     .pipe(rename('scripts.js'))
     .pipe(gulp.dest('./www/dist'));
+});
+
+gulp.task('compile img', ['clean img'], function(){
+    return gulp.src('./www/app/imagens/*.jpg')
+      .pipe(gulp.dest('./www/dist/img'))
 });
 
 gulp.task('lint', function(){
@@ -119,7 +128,7 @@ gulp.task('watch', function(){
 
 gulp.task('less', ['compile less']);
 gulp.task('js', ['compile js']);
-gulp.task('build', ['compile js', 'compile less']);
+gulp.task('build', ['compile js', 'compile less', 'compile img']);
 gulp.task('min', ['min js', 'min css']);
 
 gulp.task('buildHom', function(){

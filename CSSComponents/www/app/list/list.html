@@ -1,0 +1,69 @@
+<div class="bar bar-header bar-dark">
+	<h1 class="title">List</h1>
+</div>
+<ion-content class="has-header list">	
+	<div class="list">
+		<a href="" class="item" ng-repeat="item in items | limitTo: 2 track by $index ">
+			{{item.description}}
+		</a>
+		<div class="item item-divider">
+			item-divider
+		</div>
+		<a href="" class="item" ng-repeat="item in items | limitTo: 3 : 2 track by $index ">
+			{{item.description}}
+		</a>
+		<!-- list icons -->
+		<div class="item item-divider">
+			List Icons
+		</div>
+		<a href="" class="item item-icon-left">
+			<i class="icon ion-email"></i>E-mail
+		</a>
+		<a href="" class="item item-icon-left item-icon-right">
+			<i class="icon ion-chatbubble-working"></i>Call me
+			<i class="icon ion-ios-telephone-outline"></i>
+		</a>
+		<a href="" class="item item-icon-left">
+			<i class="icon ion-mic-a"></i>Record Album
+			<span class="item-note">
+				Grammy
+			</span>
+		</a>
+		<a href="" class="item item-icon-left">
+			<i class="icon ion-person-stalker"></i>Friends
+			<span class="badge badge-calm">0</span>
+		</a>
+		<!-- List Buttons -->
+		<div class="item item-divider">
+			List Buttons
+		</div>
+		<div class="item item-button-right">
+			Call Me
+			<button class="button button-calm">
+				<i class="icon ion-ios-telephone"></i>
+			</button>
+		</div>
+		<!-- Item Avatars -->
+		<div class="item item-divider">Item Avatars</div>
+		<a href="" class="item item-avatar" ng-repeat="item in imagens">
+			<img ng-src="{{item.src}}" alt="">
+			<h3>{{item.nome}}</h3>
+			<p>{{item.descricao}}</p>
+		</a>
+		<!-- Item Thumbnails -->
+		<div class="item item-divider">Item Thumbnails</div>
+		<a href="" class="item item-thumbnail-left" ng-repeat="item in imagens">
+			<img ng-src="{{item.src}}" alt="">
+			<h3>{{item.nome}}</h3>
+			<p>{{item.descricao}}</p>
+		</a>
+	</div>
+	
+	<!-- Inset List -->
+	<h2>Inset List</h2>
+	<div class="list list-inset">
+		<div class="item" ng-repeat="item in items  track by $index ">
+			{{item.description}}
+		</div>
+	</div>
+</ion-content>
