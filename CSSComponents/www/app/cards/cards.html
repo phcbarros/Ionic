@@ -1,0 +1,62 @@
+<div class="bar bar-header bar-positive">
+	<h1 class="title">Cards</h1>
+</div>
+<ion-content class="has-header">
+	<div class="card">
+		<div class="item item-text-wrap">Card Básico</div>
+	</div>	
+	<div class="card">
+		<div class="item item-divider">Header</div>
+		<div class="item item-text-wrap">Conteúdo</div>
+		<div class="item item-divider">Footer</div>
+	</div>
+	<div class="list card">
+		<a href="" class="class item item-icon-left" ng-repeat="card in list">
+			<i class="icon" ng-class="card.icon"></i>
+			{{::card.text}}
+		</a>
+	</div>
+	<div class="list card">
+		<div class="item item-avatar">
+			<img src="dist/img/img1.jpg" alt="">
+			<h3>Leões</h3>
+			<p>Casal de leões</p>
+		</div>
+		<div class="item item-image">
+			<img src="dist/img/img2.jpg" alt="">
+		</div>
+		<a href="" class="item item-icon-right assertive">
+			<i class="icon ion-music-note"></i>
+			Play Now
+		</a>
+	</div>
+	<div class="list card">
+		<div class="item item-avatar">
+			<img src="dist/img/img1.jpg" alt="">
+			<h3>Leões</h3>
+			<p>Casal de leões</p>
+		</div>
+		<div class="item item-body">
+			<img class="full-image" src="dist/img/img2.jpg" alt="">
+			<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam ducimus sint sunt? Magnam, veniam. Atque beatae error asperiores, laborum optio impedit magni ut laudantium repellat ratione ullam quaerat totam alias.
+			</p>
+			<p><a href="" class="subdued">1 Like</a>
+			<a href="" class="subdued">5 Comments</a></p>
+		</div>
+		<div class="item tabs tabs-secondary tabs-icon-left">
+			<a href="" class="tab-item">
+				<i class="icon ion-thumbsup"></i>
+				Like
+			</a>
+			<a href="" class="tab-item">
+				<i class="icon ion-chatbox"></i>
+				Comment
+			</a>
+			<a href="" class="tab-item">
+				<i class="icon ion-share"></i>
+				Share
+			</a>
+		</div>
+	</div>
+</ion-content>
