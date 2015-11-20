@@ -62,7 +62,8 @@ var bower       = require('bower'),
 
 
 var filesJS   = ['!./www/js/*.js', './www/app/**/*.js', '!./www/dist/**/*'],
-    filesLess = ['./www/app/**/*.less', '!./www/dist/**/*'];
+    filesLess = ['./www/app/**/*.less', '!./www/dist/**/*'],
+    filesImg = ['./www/app/imagens/*.jpg'];
 
 gulp.task('help', taskListing);
 
@@ -81,9 +82,9 @@ gulp.task('clean img', function(){
 gulp.task('compile less', ['clean less'], function(){
   return gulp.src(filesLess)
     .pipe(plumber())
-    //.pipe(sourcemaps.init())
+    .pipe(sourcemaps.init())
     .pipe(less())
-    //.pipe(sourcemaps.write())
+    .pipe(sourcemaps.write())
     .pipe(concat('./app/dist'))
     .pipe(rename('stylesheet.css'))
     .pipe(gulp.dest('./www/dist')); 
@@ -97,7 +98,7 @@ gulp.task('compile js', ['clean js', 'lint'], function(){
 });
 
 gulp.task('compile img', ['clean img'], function(){
-    return gulp.src('./www/app/imagens/*.jpg')
+    return gulp.src(filesImg)
       .pipe(gulp.dest('./www/dist/img'))
 });
 
@@ -122,12 +123,13 @@ gulp.task('min js', function(){
 });
 
 gulp.task('watch', function(){
-	 gulp.watch(filesJS, ['js']);
-   gulp.watch(filesLess, ['less']);
+	 gulp.watch(filesJS, ['compile js']);
+   gulp.watch(filesLess, ['compile less']);
+   gulp.watch(filesImg, ['compile img']);
 });
 
-gulp.task('less', ['compile less']);
-gulp.task('js', ['compile js']);
+//gulp.task('less', ['compile less']);
+//gulp.task('js', ['compile js']);
 gulp.task('build', ['compile js', 'compile less', 'compile img']);
 gulp.task('min', ['min js', 'min css']);
 

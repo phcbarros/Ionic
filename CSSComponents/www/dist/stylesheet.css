@@ -14,6 +14,11 @@
   padding-bottom: 0.5em;
 }
 
+.text-center {
+  text-align: center;
+}
+
+
 .list h2 {
   padding: .5em;
   background-color: #ccc;
