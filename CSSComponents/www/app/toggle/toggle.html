@@ -1,0 +1,16 @@
+<div class="bar bar-header bar-dark">
+	<h2 class="title">Toggle</h2>
+</div>
+<ion-content class="has-header">
+	<ul class="list">
+		<li class="item item-toggle" ng-repeat="item in toggles track by $index">
+			{{item.content}}
+			<label for="none" ng-class="item.color">
+				<input type="checkbox" ng-checked="item.checked">
+				<div class="track">
+					<div class="handle"></div>
+				</div>
+			</label>
+		</li>
+	</ul>
+</ion-content>
