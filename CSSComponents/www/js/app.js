@@ -58,11 +58,14 @@ angular.module('starter', ['ionic'])
       url: '/cards',
       templateUrl: 'app/cards/cards.html',
       controller: 'CardsCtrl'
+<<<<<<< HEAD
     })
     .state('forms', {
       url: '/forms',
       templateUrl: 'app/forms/forms.html',
       controller: 'FormsCtrl'
+=======
+>>>>>>> a2cbd1300c4637bf653cc4a340a46024dbac1505
     });
     
    $urlRouterProvider.otherwise('/header');
