@@ -34,6 +34,18 @@ function CardsCtrl($scope){
 	];
 	
 }
+angular.module("starter")
+	.controller("CheckboxCtrl", CheckboxCtrl);
+	
+function CheckboxCtrl($scope){
+	$scope.items = [
+		{ name: "Flux Capacitor", classe: "checkbox-dark", checked: true},
+		{ name: "1.21 Gigawatts", classe: "checkbox-positive", checked: true},
+		{ name: "Delorean", classe: "checkbox-assertive", checked: false},
+		{ name: "88 MPH", classe: "checkbox-calm", checked: true},
+		{ name: "Plutonium resupply", classe: "checkbox-royal", checked: false}
+	];
+}
 angular.module('starter')
 	.controller('FooterCtrl',FooterCtrl);
 	
@@ -46,7 +58,7 @@ function FooterCtrl($scope){
 angular.module("starter")
 	.controller("FormsCtrl", FormsCtrl);
 
-function FormsCtrl() {};
+function FormsCtrl() {}
 angular.module('starter')
 	.controller('HeaderCtrl', HeaderCtrl);
 	
@@ -74,6 +86,31 @@ function ListCtrl($scope){
 	
 	
 }
+angular.module("starter")
+	.controller("RadioButtonCtrl", RadioButtonCtrl);
+	
+function RadioButtonCtrl($scope){
+	$scope.items = [
+		{name: "Go", checked: false},
+		{name: "Python", checked: false},
+		{name: "Ruby", checked: false},
+		{name: ".Net", checked: false},
+		{name: "Java", checked: true},
+		{name: "PHP", checked: false}
+	];
+}
+angular.module("starter")
+	.controller("RangeCtrl", RangeCtrl);
+	
+function RangeCtrl($scope){}
+angular.module("starter")
+	.controller("SelectCtrl", SelectCtrl);
+	
+function SelectCtrl($scope){
+	$scope.lightsabers = [{name: "Red"}, {name: "Blue"}, {name:"Green"}];
+	$scope.fighters = ["A wing", "ARC-170", "Delta 7"];
+	$scope.droids = ["R2-D2", "B1", "2-1B", "IT-O"];
+}
 angular.module('starter')
 	.controller('SubHeaderCtrl', SubHeaderCtrl);
 	
@@ -92,5 +129,5 @@ function ToggleCtrl($scope){
 		{ content: "Java Applets", color: "toggle toggle-energized", checked: false },
 		{ content: "Javascript", color: "toggle toggle-dark", checked: true },
 		{ content: "Silverlight", color: "toggle toggle-positive", checked: false }
-	]
-};
+	];
+}

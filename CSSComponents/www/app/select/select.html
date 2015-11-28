@@ -1,0 +1,25 @@
+<div class="bar bar-header bar-energized">
+	<h2 class="title">Select</h2>
+</div>
+<ion-content class="has-header">
+	<div class="list">
+		<label for="" class="item item-input item-select">
+			<div class="input-label">Lightsaber</div>
+			<select name="lightsaber" ng-model="lightsaber" ng-options="lightsaber.name for lightsaber in lightsabers track by $index">
+			</select>
+		</label>
+		<label for="" class="item item-input item-select">
+			<div class="input-label">Fighters</div>
+			<select name="fighters">
+				<option value="{{item}}" ng-repeat="item in fighters track by $index">
+					{{item}}
+				</option>
+			</select>
+		</label>
+		<label for="" class="item item-input item-select">
+			<div class="input-label">Droid</div>
+			<select name="droids" ng-model="droid" ng-options="item for item in droids track by $index">
+			</select>
+		</label>
+	</div>
+</ion-content>

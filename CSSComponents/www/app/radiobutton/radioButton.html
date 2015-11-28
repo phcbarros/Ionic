@@ -1,0 +1,12 @@
+<div class="bar bar-header bar-royal">
+	<h2 class="title">Radio Button List</h2>
+</div>
+<ion-content class="has-header">
+	<div class="list">
+		<label for="none" class="item item-radio" ng-repeat="item in items track by $index">
+			<input type="radio" name="group" ng-checked="item.checked">
+			<div class="item-content">{{item.name}}</div>
+			<i class="radio-icon ion-checkmark"></i>
+		</label>
+	</div>	
+</ion-content>

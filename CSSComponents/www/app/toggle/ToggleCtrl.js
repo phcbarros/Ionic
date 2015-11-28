@@ -9,5 +9,5 @@ function ToggleCtrl($scope){
 		{ content: "Java Applets", color: "toggle toggle-energized", checked: false },
 		{ content: "Javascript", color: "toggle toggle-dark", checked: true },
 		{ content: "Silverlight", color: "toggle toggle-positive", checked: false }
-	]
-};
+	];
+}

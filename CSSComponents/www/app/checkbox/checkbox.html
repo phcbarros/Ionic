@@ -1,0 +1,13 @@
+<div class="bar bar-header bar-dark">
+	<h2 class="title">Checkbox</h2>
+</div>
+<ion-content class="has-header">
+	<ul class="list">
+		<li class="item item-checkbox" ng-repeat="item in items track by $index">
+			<label for="none" class="checkbox" ng-class="item.classe">
+				<input type="checkbox" ng-checked="item.checked">
+			</label>
+			{{item.name}}
+		</li>
+	</ul>
+</ion-content>

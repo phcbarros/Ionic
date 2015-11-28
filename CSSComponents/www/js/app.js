@@ -68,6 +68,26 @@ angular.module('starter', ['ionic'])
       url: '/toggle',
       templateUrl: 'app/toggle/toggle.html',
       controller: 'ToggleCtrl'
+    })
+    .state('checkbox', {
+      url: '/checkbox',
+      templateUrl: 'app/checkbox/checkbox.html',
+      controller: 'CheckboxCtrl'
+    })
+    .state('radiobutton', {
+      url: '/radiobutton',
+      templateUrl: 'app/radiobutton/radioButton.html',
+      controller: 'RadioButtonCtrl'
+    })
+    .state('range', {
+      url: '/range',
+      templateUrl: 'app/range/range.html',
+      controller: 'RangeCtrl'
+    })
+    .state('select', {
+      url: '/select',
+      templateUrl: 'app/select/select.html',
+      controller: 'SelectCtrl'
     });
     
    $urlRouterProvider.otherwise('/header');

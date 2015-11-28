@@ -128,8 +128,6 @@ gulp.task('watch', function(){
    gulp.watch(filesImg, ['compile img']);
 });
 
-//gulp.task('less', ['compile less']);
-//gulp.task('js', ['compile js']);
 gulp.task('build', ['compile js', 'compile less', 'compile img']);
 gulp.task('min', ['min js', 'min css']);
 
