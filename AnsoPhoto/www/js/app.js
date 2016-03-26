@@ -37,8 +37,8 @@
         .module('starter')
         .factory('CameraFactory', CameraFactory);
 
-    CameraFactory.$inject = ['$cordovaCamera'];
-    function CameraFactory($cordovaCamera) {
+    CameraFactory.$inject = ['$cordovaCamera', '$q'];
+    function CameraFactory($cordovaCamera, $q) {
         var service = {
             tirarFoto: tirarFoto
         };
@@ -47,7 +47,8 @@
 
         ////////////////
 
-        function tirarFoto() {
+        function tirarFoto(success, error) {
+
             var options = {
                 quality: 100,
                 destinationType: Camera.DestinationType.DATA_URL,
@@ -59,16 +60,16 @@
                 correctOrientation: true
             };
 
-            $cordovaCamera.getPicture(options)
+            return $cordovaCamera.getPicture(options)
                 .then(sucessoTirarFoto, erroTirarFoto);
         }
 
         function sucessoTirarFoto(imageData) {
-            console.log(imageData);
+           return $q.resolve(imageData)
         }
 
         function erroTirarFoto(err) {
-            console.error(err);
+           return $q.reject(err);
         }
 
     }
@@ -98,12 +99,22 @@
     CameraController.$inject = ['CameraFactory'];
     function CameraController(CameraFactory) {
         var vm = this;
+        vm.foto = null;
         vm.onTabSelect = onTabSelect;
 
         ////////////////
 
         function onTabSelect() {
-            CameraFactory.tirarFoto();
+            CameraFactory.tirarFoto()
+                .then(sucessoTirarFoto, erroTirarFoto);
+        }
+
+        function sucessoTirarFoto(imageData) {
+            vm.foto = "data:image/jpeg;base64," + imageData;
+        }
+
+        function erroTirarFoto(err) {
+            console.error(err);
         }
     }
 })();
@@ -123,7 +134,7 @@
         ////////////////
 
         function onTabSelect() {
-           alert("Gallery");
+            alert("Gallery");
         }
     }
 })();
