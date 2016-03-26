@@ -39,20 +39,26 @@
 
     CameraFactory.$inject = ['$cordovaCamera', '$q'];
     function CameraFactory($cordovaCamera, $q) {
+        var type = {
+            CAMERA: 1,
+            GALLERY: 2
+        };
+        
         var service = {
-            tirarFoto: tirarFoto
+            getFoto: getFoto,
+            type: type
         };
 
         return service;
 
         ////////////////
-
-        function tirarFoto(success, error) {
+        
+        function getFoto(option) {
 
             var options = {
                 quality: 100,
                 destinationType: Camera.DestinationType.DATA_URL,
-                sourceType: Camera.PictureSourceType.CAMERA,
+                sourceType: option,
                 encodingType: Camera.EncodingType.JPEG,
                 targetWidth: 300,
                 targetHeight: 300,
@@ -61,14 +67,14 @@
             };
 
             return $cordovaCamera.getPicture(options)
-                .then(sucessoTirarFoto, erroTirarFoto);
+                .then(sucessoGetFoto, erroGetFoto);
         }
 
-        function sucessoTirarFoto(imageData) {
+        function sucessoGetFoto(imageData) {
            return $q.resolve(imageData)
         }
 
-        function erroTirarFoto(err) {
+        function erroGetFoto(err) {
            return $q.reject(err);
         }
 
@@ -105,15 +111,15 @@
         ////////////////
 
         function onTabSelect() {
-            CameraFactory.tirarFoto()
+            CameraFactory.getFoto(CameraFactory.type.CAMERA)
                 .then(sucessoTirarFoto, erroTirarFoto);
         }
 
-        function sucessoTirarFoto(imageData) {
+        function sucessoGetFoto(imageData) {
             vm.foto = "data:image/jpeg;base64," + imageData;
         }
 
-        function erroTirarFoto(err) {
+        function erroGetFoto(err) {
             console.error(err);
         }
     }
@@ -129,12 +135,22 @@
     GalleryController.$inject = ['CameraFactory'];
     function GalleryController(CameraFactory) {
         var vm = this;
+        vm.foto = null;
         vm.onTabSelect = onTabSelect;
 
         ////////////////
 
-        function onTabSelect() {
-            alert("Gallery");
+         function onTabSelect() {
+            CameraFactory.getFoto(CameraFactory.type.GALLERY)
+                .then(sucessoGetFoto, erroGetFoto);
+        }
+
+        function sucessoGetFoto(imageData) {
+            vm.foto = "data:image/jpeg;base64," + imageData;
+        }
+
+        function erroGetFoto(err) {
+            console.error(err);
         }
     }
 })();

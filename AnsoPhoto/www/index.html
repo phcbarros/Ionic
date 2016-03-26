@@ -42,7 +42,7 @@
                 <ion-view>
                     <ion-content>
                         <h1>Camera</h1>
-                        <div class="card">
+                        <div class="card" ng-if="camera.foto">
                             <div class="item item-image">
                                 <img ng-src="{{camera.foto}}"/>    
                             </div>                            
@@ -54,6 +54,11 @@
                 <ion-view>
                     <ion-content>
                         <h1>Gallery</h1>
+                        <div class="card" ng-if="gallery.foto">
+                            <div class="item item-image">
+                                <img ng-src="{{gallery.foto}}"/>    
+                            </div>                            
+                        </div>
                     </ion-content>
                 </ion-view>
             </ion-tab>
