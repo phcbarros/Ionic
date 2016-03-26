@@ -1,5 +1,5 @@
 (function() {
-
+    'use strict';
     // Ionic Starter App
 
     // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -28,38 +28,102 @@
                 }
             });
         })
+})();
 
-        .controller('HomeController', function($cordovaCamera) {
-            var vm = this;
-            vm.tirarFoto = tirarFoto;
+(function() {
+    'use strict';
 
-            /////////////
-            function tirarFoto() {
-                var options = {
-                    quality: 100,
-                    destinationType: Camera.DestinationType.DATA_URL,
-                    sourceType: Camera.PictureSourceType.CAMERA,
-                    encodingType: Camera.EncodingType.JPEG,
-                    targetWidth: 300,
-                    targetHeight: 300,
-                    saveToPhotoAlbum: false,
-                    correctOrientation: true
-                };
+    angular
+        .module('starter')
+        .factory('CameraFactory', CameraFactory);
 
-                $cordovaCamera.getPicture(options)
-                    .then(sucessoTirarFoto, erroTirarFoto);
-            }
+    CameraFactory.$inject = ['$cordovaCamera'];
+    function CameraFactory($cordovaCamera) {
+        var service = {
+            tirarFoto: tirarFoto
+        };
 
-            function sucessoTirarFoto(imageData) {
-                console.log(imageData);
-            }
+        return service;
 
-            function erroTirarFoto(err) {
-                console.error(err);
-            }
+        ////////////////
 
-        });
+        function tirarFoto() {
+            var options = {
+                quality: 100,
+                destinationType: Camera.DestinationType.DATA_URL,
+                sourceType: Camera.PictureSourceType.CAMERA,
+                encodingType: Camera.EncodingType.JPEG,
+                targetWidth: 300,
+                targetHeight: 300,
+                saveToPhotoAlbum: false,
+                correctOrientation: true
+            };
 
+            $cordovaCamera.getPicture(options)
+                .then(sucessoTirarFoto, erroTirarFoto);
+        }
 
+        function sucessoTirarFoto(imageData) {
+            console.log(imageData);
+        }
 
+        function erroTirarFoto(err) {
+            console.error(err);
+        }
+
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('starter')
+        .controller('HomeController', HomeController);
+
+    HomeController.$inject = [];
+    function HomeController() {
+        var vm = this;
+    }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('starter')
+        .controller('CameraController', CameraController);
+
+    CameraController.$inject = ['CameraFactory'];
+    function CameraController(CameraFactory) {
+        var vm = this;
+        vm.onTabSelect = onTabSelect;
+
+        ////////////////
+
+        function onTabSelect() {
+            CameraFactory.tirarFoto();
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('starter')
+        .controller('GalleryController', GalleryController);
+
+    GalleryController.$inject = ['CameraFactory'];
+    function GalleryController(CameraFactory) {
+        var vm = this;
+        vm.onTabSelect = onTabSelect;
+
+        ////////////////
+
+        function onTabSelect() {
+           alert("Gallery");
+        }
+    }
 })();
