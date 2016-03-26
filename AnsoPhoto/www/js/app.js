@@ -5,10 +5,10 @@
     // angular.module is a global place for creating, registering and retrieving Angular modules
     // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
     // the 2nd parameter is an array of 'requires'
-    angular.module('starter', ['ionic'])
-    
-        .config(function($ionicConfigProvider){
-            $ionicConfigProvider.tabs.position("bottom");
+    angular.module('starter', ['ionic', 'ngCordova'])
+
+        .config(function($ionicConfigProvider) {
+            $ionicConfigProvider.tabs.position('bottom');
         })
 
         .run(function($ionicPlatform) {
@@ -28,5 +28,38 @@
                 }
             });
         })
+
+        .controller('HomeController', function($cordovaCamera) {
+            var vm = this;
+            vm.tirarFoto = tirarFoto;
+
+            /////////////
+            function tirarFoto() {
+                var options = {
+                    quality: 100,
+                    destinationType: Camera.DestinationType.DATA_URL,
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                    encodingType: Camera.EncodingType.JPEG,
+                    targetWidth: 300,
+                    targetHeight: 300,
+                    saveToPhotoAlbum: false,
+                    correctOrientation: true
+                };
+
+                $cordovaCamera.getPicture(options)
+                    .then(sucessoTirarFoto, erroTirarFoto);
+            }
+
+            function sucessoTirarFoto(imageData) {
+                console.log(imageData);
+            }
+
+            function erroTirarFoto(err) {
+                console.error(err);
+            }
+
+        });
+
+
 
 })();

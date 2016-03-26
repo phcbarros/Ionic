@@ -1,4 +1,6 @@
 #AnsoPhoto
 
-Exemplo retirado do canal AnsoDev do youtube
+##Exemplo retirado do canal AnsoDev do YouTube
+
 1. Aula 1 - Criando navegação por aba (https://www.youtube.com/watch?v=latNBqXxeNY)
+1. Aula 2 - Instalando Plugin de Câmera e tirando as primeiras fotos (https://www.youtube.com/watch?v=ex7lX22xO4Q)
