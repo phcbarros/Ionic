@@ -35,6 +35,25 @@
 
     angular
         .module('starter')
+        .directive('filterBar', filterBar);
+
+    filterBar.$inject = [];
+    function filterBar() {
+        var directive = {
+            restrict: 'E',
+            templateUrl: 'components/filter-bar.html'
+        };
+        
+        return directive;
+    }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('starter')
         .factory('CameraFactory', CameraFactory);
 
     CameraFactory.$inject = ['$cordovaCamera', '$q'];
@@ -43,7 +62,7 @@
             CAMERA: 1,
             GALLERY: 2
         };
-        
+
         var service = {
             getFoto: getFoto,
             type: type
@@ -52,7 +71,7 @@
         return service;
 
         ////////////////
-        
+
         function getFoto(option) {
 
             var options = {
@@ -71,11 +90,11 @@
         }
 
         function sucessoGetFoto(imageData) {
-           return $q.resolve(imageData)
+            return $q.resolve(imageData)
         }
 
         function erroGetFoto(err) {
-           return $q.reject(err);
+            return $q.reject(err);
         }
 
     }
@@ -107,6 +126,7 @@
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
+        vm.onFilter = onFilter;
 
         ////////////////
 
@@ -121,6 +141,10 @@
 
         function erroGetFoto(err) {
             console.error(err);
+        }
+        
+        function onFilter(option){
+            alert(option);
         }
     }
 })();
@@ -137,10 +161,11 @@
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
-
+        vm.onFilter = onFilter;
+        
         ////////////////
 
-         function onTabSelect() {
+        function onTabSelect() {
             CameraFactory.getFoto(CameraFactory.type.GALLERY)
                 .then(sucessoGetFoto, erroGetFoto);
         }
@@ -151,6 +176,10 @@
 
         function erroGetFoto(err) {
             console.error(err);
+        }
+        
+        function onFilter(option){
+            alert(option);
         }
     }
 })();

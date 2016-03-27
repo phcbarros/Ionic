@@ -31,33 +31,35 @@
             <h1 class="title">Photo App</h1>
         </ion-header-bar>
         <ion-tabs class="tabs-striped tabs-color-positive">
-            <ion-tab title="Home" icon-on="ion-home" icon-off="ion-home" ng-controller="HomeController as home" >
+            <ion-tab title="Home" icon-on="ion-home" icon-off="ion-home" ng-controller="HomeController as home">
                 <ion-view>
                     <ion-content>
                         <h1>Home</h1>
                     </ion-content>
                 </ion-view>
             </ion-tab>
-            <ion-tab title="Camera" icon-on="ion-ios-camera" icon-off="ion-ios-camera" ng-controller="CameraController as camera" on-select="camera.onTabSelect()">
+            <ion-tab title="Camera" icon-on="ion-ios-camera" icon-off="ion-ios-camera" ng-controller="CameraController as ctrl" on-select="ctrl.onTabSelect()">
                 <ion-view>
+                    <filter-bar></filter-bar>
                     <ion-content>
                         <h1>Camera</h1>
-                        <div class="card" ng-if="camera.foto">
+                        <div class="card" ng-if="ctrl.foto">
                             <div class="item item-image">
-                                <img ng-src="{{camera.foto}}"/>    
-                            </div>                            
+                                <img ng-src="{{ctrl.foto}}" />
+                            </div>
                         </div>
-                    </ion-content>    
+                    </ion-content>
                 </ion-view>
             </ion-tab>
-            <ion-tab title="Gallery" icon-on="ion-images" icon-off="ion-images" ng-controller="GalleryController as gallery" on-select="gallery.onTabSelect()">
+            <ion-tab title="Gallery" icon-on="ion-images" icon-off="ion-images" ng-controller="GalleryController as ctrl" on-select="ctrl.onTabSelect()">
                 <ion-view>
+                    <filter-bar></filter-bar>
                     <ion-content>
                         <h1>Gallery</h1>
-                        <div class="card" ng-if="gallery.foto">
+                        <div class="card" ng-if="ctrl.foto">
                             <div class="item item-image">
-                                <img ng-src="{{gallery.foto}}"/>    
-                            </div>                            
+                                <img ng-src="{{ctrl.foto}}" />
+                            </div>
                         </div>
                     </ion-content>
                 </ion-view>
