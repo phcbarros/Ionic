@@ -113,23 +113,24 @@
             applyFilter: applyFilter
         };
 
+
+        Caman.Event.listen("processStart", function() {
+            $ionicLoading.show();
+        });
+
+        Caman.Event.listen("renderFinished", function() {
+            $ionicLoading.hide();
+        });
+
         return service;
 
         ////////////////
 
         function applyFilter(imageId, option) {
-            
-            Caman.Event.listen("processStart", function(){
-                $ionicLoading.show();
-            });
-            
-            Caman.Event.listen("renderFinished", function(){
-                $ionicLoading.hide();
-            });
-            
+
             Caman('#' + imageId, function camanApply() {
                 this.reset();
-                
+
                 switch (option) {
                     case 1:
                         this.nostalgia();
@@ -156,12 +157,167 @@
 
     angular
         .module('starter')
+        .service('LocalStorageService', LocalStorageService);
+
+    LocalStorageService.$inject = [];
+    function LocalStorageService() {
+        this.save = save;
+        this.get = get;
+
+        ////////////////
+
+        function save(chave, data) {
+            var lista = angular.toJson(data);
+            localStorage.setItem(chave, lista);
+        }
+
+        function get(chave) {
+            var lista = localStorage.getItem(chave);
+            return angular.fromJson(lista) || [];
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('starter')
+        .factory('FileFactory', FileFactory);
+
+    FileFactory.$inject = ['$cordovaFile', '$q', 'LocalStorageService'];
+    function FileFactory($cordovaFile, $q, LocalStorageService) {
+
+        var fileNames = [],
+            images = [];
+
+        var service = {
+            save: save,
+            load: load,
+            fileNames: fileNames,
+            images: images
+        };
+
+        return service;
+
+        ////////////////
+        function save(dataUrl) {
+
+            var promise = (function(dataUrl) {
+                var name = getName(),
+                defer = $q.defer();
+                
+                $cordovaFile
+                    .writeFile(cordova.file.externalApplicationStorageDirectory, name, dataUrl, true)
+                    .then(sucessoWriteFile, erroWriteFile);
+
+                function sucessoWriteFile(result) {
+                    console.log("sucesso save");
+                    images.push(dataUrl);
+                    fileNames.push(name);
+                    saveFileNames(fileNames);
+                    defer.resolve(result);
+                }
+
+                function erroWriteFile(err) {
+                    console.log("erro", err);
+                    defer.reject(err);
+                }
+
+                return defer.promise;
+
+            })(dataUrl);
+
+            return promise;
+        }
+
+        function getName() {
+            var today = new Date();
+            return today.getTime() + ".jpg";
+        }
+
+        function saveFileNames(fileNames) {
+            LocalStorageService.save('fileNames', fileNames);
+        }
+
+        function loadFileNames() {
+            return LocalStorageService.get("fileNames");
+        }
+
+        function load() {
+            fileNames = loadFileNames();
+
+            var i = 0,
+                l = fileNames.length;
+
+            for (; l--; i++) {
+                (function(i, fileNames) {
+                    openImage(fileNames[i], sucessoOpenImage);
+
+                    function sucessoOpenImage(dataUrl) {
+                        images.push(dataUrl);
+                    }
+
+                })(i, fileNames);
+            }
+        }
+
+        function openImage(name, success) {
+
+            (function(name, success) {
+                $cordovaFile
+                    .readAsText(cordova.file.externalApplicationStorageDirectory, name)
+                    .then(sucessoReadAsText, erroReadAsText);
+
+                function sucessoReadAsText(result) {
+                    success(result);
+                }
+
+                function erroReadAsText(err) {
+                    console.log(err);
+                }
+            })(name, success);
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('starter')
+        .service('PopupService', PopupService);
+
+    PopupService.$inject = ['$ionicPopup'];
+    function PopupService($ionicPopup) {
+        this.alert = alert;
+
+        ////////////////
+
+        function alert(message) {
+            $ionicPopup.alert({
+                title: message
+            });
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('starter')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['ImageFilterFactory'];
-    function HomeController(ImageFilterFactory) {
+    HomeController.$inject = ['FileFactory'];
+    function HomeController(FileFactory) {
         var vm = this;
-        ImageFilterFactory.applyFilter('teste', 1);
+
+        ionic.Platform.ready(function() {
+            FileFactory.load();
+            vm.images = FileFactory.images;
+        });
+
     }
 
 })();
@@ -173,12 +329,13 @@
         .module('starter')
         .controller('CameraController', CameraController);
 
-    CameraController.$inject = ['CameraFactory', 'ImageFilterFactory'];
-    function CameraController(CameraFactory, ImageFilterFactory) {
+    CameraController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'PopupService'];
+    function CameraController(CameraFactory, ImageFilterFactory, FileFactory, PopupService) {
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
         vm.onFilter = onFilter;
+        vm.onSave = onSave;
 
         ////////////////
 
@@ -198,6 +355,30 @@
         function onFilter(option) {
             ImageFilterFactory.applyFilter('fotoImage', option);
         }
+
+        function onSave() {
+            var canvas = document.getElementById("fotoImage"),
+                dataUrl;
+
+            if (typeof (canvas.toDataURL) === 'undefined') {
+                dataUrl = vm.foto;
+            }
+            else {
+                dataUrl = canvas.toDataURL();
+            }
+
+            FileFactory
+                .save(dataUrl)
+                .then(sucessoSave, erroSave);
+        }
+
+        function sucessoSave() {
+            PopupService.alert("Foto salva com sucesso!");
+        }
+
+        function erroSave() {
+            PopupService.alert("Não foi possível salvar a foto!");
+        }
     }
 })();
 
@@ -208,12 +389,13 @@
         .module('starter')
         .controller('GalleryController', GalleryController);
 
-    GalleryController.$inject = ['CameraFactory', 'ImageFilterFactory'];
-    function GalleryController(CameraFactory, ImageFilterFactory) {
+    GalleryController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'PopupService'];
+    function GalleryController(CameraFactory, ImageFilterFactory, FileFactory, PopupService) {
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
         vm.onFilter = onFilter;
+        vm.onSave = onSave;
 
         ////////////////
 
@@ -233,6 +415,31 @@
 
         function onFilter(option) {
             ImageFilterFactory.applyFilter('galleryImage', option);
+        }
+
+        function onSave() {
+            var canvas = document.getElementById("galleryImage"),
+                dataUrl;
+
+            if (typeof (canvas.toDataURL) === 'undefined') {
+                dataUrl = vm.foto;
+            }
+            else {
+                dataUrl = canvas.toDataURL();
+            }
+
+            FileFactory
+                .save(dataUrl)
+                .then(sucessoSave, erroSave);
+
+        }
+
+        function sucessoSave() {
+            PopupService.alert("Foto salva com sucesso!");
+        }
+
+        function erroSave(err) {
+            PopupService.alert("Não foi possível salvar a foto!");
         }
     }
 })();

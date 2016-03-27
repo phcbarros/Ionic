@@ -1,4 +1,8 @@
 /* Empty. Add your own CSS if you like */
-.image-filter{
+.image-filter, .item-body > img {
     width: 100%;
+}
+
+.button-clear.ion-heart{
+    color: #ff0000;
 }

@@ -13,12 +13,12 @@
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
 
-<script src="js/vendor/caman.full.min.js"></script>
+    <script src="js/vendor/caman.full.min.js"></script>
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="js/vendor/ng-cordova.min.js"></script>
-    
-    
+
+
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -33,11 +33,12 @@
             <h1 class="title">Photo App</h1>
         </ion-header-bar>
         <ion-tabs class="tabs-striped tabs-color-positive">
-            <ion-tab title="Home" icon-on="ion-home" icon-off="ion-home" ng-controller="HomeController as home">
+            <ion-tab title="Home" icon-on="ion-home" icon-off="ion-home" ng-controller="HomeController as ctrl">
                 <ion-view>
                     <ion-content>
-                        <h1>Home</h1>
-                        <img src="img/ionic.png" id="teste" alt="">
+                        <div class="item item-body" ng-repeat="image in ctrl.images">
+                            <img ng-src="{{image}}" />
+                        </div>
                     </ion-content>
                 </ion-view>
             </ion-tab>
@@ -45,10 +46,12 @@
                 <ion-view>
                     <filter-bar></filter-bar>
                     <ion-content>
-                        <h1>Camera</h1>
                         <div class="card" ng-if="ctrl.foto">
+                            <div class="item item-divider">
+                                <button class="button button-clear icon-left ion-heart" ng-click="ctrl.onSave()">Clique para salvar</button>
+                            </div>
                             <div class="item item-image">
-                                <img ng-src="{{ctrl.foto}}" id="fotoImage" class="image-filter" />
+                                <img ng-src="{{ctrl.foto}}" id="fotoImage" class="full-size" />
                             </div>
                         </div>
                     </ion-content>
@@ -58,10 +61,12 @@
                 <ion-view>
                     <filter-bar></filter-bar>
                     <ion-content>
-                        <h1>Gallery</h1>
                         <div class="card" ng-if="ctrl.foto">
+                            <div class="item item-divider">
+                                <button class="button button-clear icon-left ion-heart" ng-click="ctrl.onSave()">Clique para salvar</button>
+                            </div>
                             <div class="item item-image">
-                                <img ng-src="{{ctrl.foto}}" id="galleryImage" class="image-filter"/>
+                                <img ng-src="{{ctrl.foto}}" id="galleryImage" class="image-filter" />
                             </div>
                         </div>
                     </ion-content>
