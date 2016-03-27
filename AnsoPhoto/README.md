@@ -8,3 +8,4 @@
 1. Aula 4 - Exibindo nossa foto (https://www.youtube.com/watch?v=Fz_NBKO9GDU)
 1. Aula 5 - Buscando imagens salvas na galeria (https://www.youtube.com/watch?v=sn88Q58PfJM)
 1. Aula 6 - Criando componente reutilizável (https://www.youtube.com/watch?v=92lWPdNyinA)
+1. Aula 7 - Aplicando o filtro em nossas imagens (https://www.youtube.com/watch?v=pNNZRzaOYWg)

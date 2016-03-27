@@ -13,10 +13,12 @@
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
 
+<script src="js/vendor/caman.full.min.js"></script>
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
-
-    <script src="js/ng-cordova.min.js"></script>
+    <script src="js/vendor/ng-cordova.min.js"></script>
+    
+    
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -35,6 +37,7 @@
                 <ion-view>
                     <ion-content>
                         <h1>Home</h1>
+                        <img src="img/ionic.png" id="teste" alt="">
                     </ion-content>
                 </ion-view>
             </ion-tab>
@@ -45,7 +48,7 @@
                         <h1>Camera</h1>
                         <div class="card" ng-if="ctrl.foto">
                             <div class="item item-image">
-                                <img ng-src="{{ctrl.foto}}" />
+                                <img ng-src="{{ctrl.foto}}" id="fotoImage" class="image-filter" />
                             </div>
                         </div>
                     </ion-content>
@@ -58,7 +61,7 @@
                         <h1>Gallery</h1>
                         <div class="card" ng-if="ctrl.foto">
                             <div class="item item-image">
-                                <img ng-src="{{ctrl.foto}}" />
+                                <img ng-src="{{ctrl.foto}}" id="galleryImage" class="image-filter"/>
                             </div>
                         </div>
                     </ion-content>

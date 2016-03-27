@@ -43,7 +43,7 @@
             restrict: 'E',
             templateUrl: 'components/filter-bar.html'
         };
-        
+
         return directive;
     }
 
@@ -65,7 +65,7 @@
 
         var service = {
             getFoto: getFoto,
-            type: type
+            type: type,
         };
 
         return service;
@@ -105,11 +105,63 @@
 
     angular
         .module('starter')
+        .factory('ImageFilterFactory', ImageFilterFactory);
+
+    ImageFilterFactory.$inject = ['$ionicLoading'];
+    function ImageFilterFactory($ionicLoading) {
+        var service = {
+            applyFilter: applyFilter
+        };
+
+        return service;
+
+        ////////////////
+
+        function applyFilter(imageId, option) {
+            
+            Caman.Event.listen("processStart", function(){
+                $ionicLoading.show();
+            });
+            
+            Caman.Event.listen("renderFinished", function(){
+                $ionicLoading.hide();
+            });
+            
+            Caman('#' + imageId, function camanApply() {
+                this.reset();
+                
+                switch (option) {
+                    case 1:
+                        this.nostalgia();
+                        break;
+                    case 2:
+                        this.hazyDays();
+                        break;
+                    case 3:
+                        this.love();
+                        break;
+                    case 4:
+                        this.clarity();
+                        break;
+                }
+
+                this.render();
+            });
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('starter')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = [];
-    function HomeController() {
+    HomeController.$inject = ['ImageFilterFactory'];
+    function HomeController(ImageFilterFactory) {
         var vm = this;
+        ImageFilterFactory.applyFilter('teste', 1);
     }
 
 })();
@@ -121,8 +173,8 @@
         .module('starter')
         .controller('CameraController', CameraController);
 
-    CameraController.$inject = ['CameraFactory'];
-    function CameraController(CameraFactory) {
+    CameraController.$inject = ['CameraFactory', 'ImageFilterFactory'];
+    function CameraController(CameraFactory, ImageFilterFactory) {
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
@@ -132,7 +184,7 @@
 
         function onTabSelect() {
             CameraFactory.getFoto(CameraFactory.type.CAMERA)
-                .then(sucessoTirarFoto, erroTirarFoto);
+                .then(sucessoGetFoto, erroGetFoto);
         }
 
         function sucessoGetFoto(imageData) {
@@ -142,9 +194,9 @@
         function erroGetFoto(err) {
             console.error(err);
         }
-        
-        function onFilter(option){
-            alert(option);
+
+        function onFilter(option) {
+            ImageFilterFactory.applyFilter('fotoImage', option);
         }
     }
 })();
@@ -156,13 +208,13 @@
         .module('starter')
         .controller('GalleryController', GalleryController);
 
-    GalleryController.$inject = ['CameraFactory'];
-    function GalleryController(CameraFactory) {
+    GalleryController.$inject = ['CameraFactory', 'ImageFilterFactory'];
+    function GalleryController(CameraFactory, ImageFilterFactory) {
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
         vm.onFilter = onFilter;
-        
+
         ////////////////
 
         function onTabSelect() {
@@ -171,15 +223,16 @@
         }
 
         function sucessoGetFoto(imageData) {
+            delete vm.foto;
             vm.foto = "data:image/jpeg;base64," + imageData;
         }
 
         function erroGetFoto(err) {
             console.error(err);
         }
-        
-        function onFilter(option){
-            alert(option);
+
+        function onFilter(option) {
+            ImageFilterFactory.applyFilter('galleryImage', option);
         }
     }
 })();
