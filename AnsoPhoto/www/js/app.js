@@ -309,15 +309,35 @@
         .module('starter')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['FileFactory'];
-    function HomeController(FileFactory) {
+    HomeController.$inject = ['FileFactory', '$ionicModal', '$scope'];
+    function HomeController(FileFactory, $ionicModal, $scope) {
         var vm = this;
-
+        vm.showModal = showModal;
+        vm.closeModal = closeModal;
+        
+        ///////////////////
+        
         ionic.Platform.ready(function() {
             FileFactory.load();
             vm.images = FileFactory.images;
         });
+        
+        $ionicModal.fromTemplateUrl("image-modal.html", {
+            scope: $scope,
+            animation: 'slide-in-up'
+        })
+        .then(function sucessoModal(modal){
+            vm.modal = modal;
+        });
+        
+        function showModal(image){
+            vm.imageModal = image;
+            vm.modal.show();
+        }
 
+        function closeModal(){
+            vm.modal.hide();
+        }
     }
 
 })();

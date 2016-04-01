@@ -36,8 +36,30 @@
             <ion-tab title="Home" icon-on="ion-home" icon-off="ion-home" ng-controller="HomeController as ctrl">
                 <ion-view>
                     <ion-content>
-                        <div class="item item-body" ng-repeat="image in ctrl.images">
-                            <img ng-src="{{image}}" />
+                        <div ng-repeat="image in ctrl.images track by $index">
+                            <div class="row" ng-if="$index % 3 === 0">
+                                <div class="col-33" ng-click="ctrl.showModal(ctrl.images[$index])">
+                                    <div class="car">
+                                        <div class="item item-image">
+                                            <img ng-src="{{image}}" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-33" ng-if="$index + 1 < ctrl.images.length" ng-click="ctrl.showModal(ctrl.images[$index + 1])">
+                                    <div class="car">
+                                        <div class="item item-image">
+                                            <img ng-src="{{ctrl.images[$index + 1]}}" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-33" ng-if="$index + 2 < ctrl.images.length" ng-click="ctrl.showModal(ctrl.images[$index + 2])">
+                                    <div class="car">
+                                        <div class="item item-image">
+                                            <img ng-src="{{ctrl.images[$index + 2]}}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </ion-content>
                 </ion-view>
@@ -73,7 +95,15 @@
                 </ion-view>
             </ion-tab>
         </ion-tabs>
+        <script type="text/ng-template" id="image-modal.html">
+            <div class="modal card transparent" ng-click="ctrl.closeModal()">
+                <ion-pane class="transparent">
+                   <div class="item item-image transparent">
+                       <img ng-src="{{ctrl.imageModal}}" alt=""/>
+                   </div>
+                </ion-pane>
+            </div>
+        </script>
     </ion-pane>
 </body>
-
 </html>

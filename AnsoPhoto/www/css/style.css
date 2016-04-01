@@ -6,3 +6,12 @@
 .button-clear.ion-heart{
     color: #ff0000;
 }
+
+.transparent{
+    background: transparent !important;
+}
+
+.pane.transparent{
+    width: 80%;
+    margin: 0 auto;
+}
