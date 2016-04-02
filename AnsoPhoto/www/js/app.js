@@ -5,7 +5,7 @@
     // angular.module is a global place for creating, registering and retrieving Angular modules
     // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
     // the 2nd parameter is an array of 'requires'
-    angular.module('starter', ['ionic', 'ngCordova'])
+    angular.module('starter', ['ionic', 'ngCordova', 'ionic-toast'])
 
         .config(function($ionicConfigProvider) {
             $ionicConfigProvider.tabs.position('bottom');
@@ -309,6 +309,46 @@
     }
 })();
 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('starter')
+        .service('ToastService', ToastService);
+
+    ToastService.$inject = ['ionicToast', '$q', '$timeout'];
+    function ToastService(ionicToast, $q, $timeout) {
+        this.show = show;
+
+        ////////////////
+
+        function show(options) {
+            var defer = $q.defer(),
+                config = applyOptionsDefault(options);
+
+            ionicToast.show(config.message, config.position, config.stick, config.time);
+
+            $timeout(function() {
+                defer.resolve();
+            }, config.time);
+
+            return defer.promise;
+        }
+
+        function applyOptionsDefault(options) {
+            var config = {
+                message: "This is a toast",
+                position: 'top',
+                stick: true,
+                time: 5000
+            };
+
+            return angular.extend({}, config, options);
+        }
+    }
+})();
+
 (function() {
     'use strict';
 
@@ -316,8 +356,8 @@
         .module('starter')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['FileFactory', '$ionicModal', '$scope'];
-    function HomeController(FileFactory, $ionicModal, $scope) {
+    HomeController.$inject = ['FileFactory', '$ionicModal', '$scope', 'ToastService'];
+    function HomeController(FileFactory, $ionicModal, $scope, ToastService) {
         var vm = this;
         vm.showModal = showModal;
         vm.closeModal = closeModal;
@@ -347,6 +387,7 @@
         function closeModal() {
             vm.modal.hide();
         }
+
     }
 
 })();
@@ -358,8 +399,8 @@
         .module('starter')
         .controller('CameraController', CameraController);
 
-    CameraController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'PopupService', '$ionicTabsDelegate'];
-    function CameraController(CameraFactory, ImageFilterFactory, FileFactory, PopupService, $ionicTabsDelegate) {
+    CameraController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'ToastService', '$ionicTabsDelegate'];
+    function CameraController(CameraFactory, ImageFilterFactory, FileFactory, ToastService, $ionicTabsDelegate) {
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
@@ -397,18 +438,19 @@
         }
 
         function sucessoSave() {
-            PopupService.alert("Foto salva com sucesso!")
+            ToastService.show({ message: "Foto salva com sucesso!", position: "middle", stick: false, time:  1000 })
                 .then(redirectToTabHome);
         }
 
         function erroSave() {
-            PopupService.alert("Não foi possível salvar a foto!")
+            ToastService.show({ message: "Não foi possível salvar a foto!", position: "middle" })
                 .then(redirectToTabHome);
         }
 
         function redirectToTabHome() {
             $ionicTabsDelegate.select(0);
         }
+
     }
 })();
 
@@ -419,8 +461,8 @@
         .module('starter')
         .controller('GalleryController', GalleryController);
 
-    GalleryController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'PopupService', '$ionicTabsDelegate'];
-    function GalleryController(CameraFactory, ImageFilterFactory, FileFactory, PopupService, $ionicTabsDelegate) {
+    GalleryController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'ToastService', '$ionicTabsDelegate'];
+    function GalleryController(CameraFactory, ImageFilterFactory, FileFactory, ToastService, $ionicTabsDelegate) {
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
@@ -459,12 +501,12 @@
         }
 
         function sucessoSave() {
-            PopupService.alert("Foto salva com sucesso!")
+            ToastService.show({ message: "Foto salva com sucesso!", position: "middle", stick: false, time: 1000 })
                 .then(redirectToTabHome);;
         }
 
         function erroSave(err) {
-            PopupService.alert("Não foi possível salvar a foto!")
+            ToastService.show({ message: "Não foi possível salvar a foto!", position: "middle" })
                 .then(redirectToTabHome);;
         }
 
