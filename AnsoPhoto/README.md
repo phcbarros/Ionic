@@ -11,3 +11,4 @@
 1. Aula 7 - Aplicando o filtro em nossas imagens (https://www.youtube.com/watch?v=pNNZRzaOYWg)
 1. Aula 8 - Salvando nossas fotos (https://www.youtube.com/watch?v=9S7heokB6sE)
 1. Aula 9 - Criando galeria de imagens (https://www.youtube.com/watch?v=KGW9cLXmZCM)
+1. Aula 10 - Finalizando a aplicação (https://www.youtube.com/watch?v=v05PAITEDtI)

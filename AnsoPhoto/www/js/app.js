@@ -113,21 +113,12 @@
             applyFilter: applyFilter
         };
 
-
-        Caman.Event.listen("processStart", function() {
-            $ionicLoading.show();
-        });
-
-        Caman.Event.listen("renderFinished", function() {
-            $ionicLoading.hide();
-        });
-
         return service;
 
         ////////////////
 
         function applyFilter(imageId, option) {
-
+            $ionicLoading.show();
             Caman('#' + imageId, function camanApply() {
                 this.reset();
 
@@ -146,7 +137,9 @@
                         break;
                 }
 
-                this.render();
+                this.render(function sucessoRender() {
+                    $ionicLoading.hide();
+                });
             });
         }
     }
@@ -205,8 +198,8 @@
 
             var promise = (function(dataUrl) {
                 var name = getName(),
-                defer = $q.defer();
-                
+                    defer = $q.defer();
+
                 $cordovaFile
                     .writeFile(cordova.file.externalApplicationStorageDirectory, name, dataUrl, true)
                     .then(sucessoWriteFile, erroWriteFile);
@@ -288,16 +281,30 @@
         .module('starter')
         .service('PopupService', PopupService);
 
-    PopupService.$inject = ['$ionicPopup'];
-    function PopupService($ionicPopup) {
+    PopupService.$inject = ['$ionicPopup', '$q'];
+    function PopupService($ionicPopup, $q) {
         this.alert = alert;
 
         ////////////////
 
         function alert(message) {
-            $ionicPopup.alert({
-                title: message
+            var defer = $q.defer();
+
+            $ionicPopup.show({
+                title: message,
+                buttons: [
+                    {
+                        text: "OK",
+                        type: "button-positive",
+                        onTap: function alertOnTab() {
+                            defer.resolve();
+
+                        }
+                    }
+                ]
             });
+
+            return defer.promise;
         }
     }
 })();
@@ -314,28 +321,30 @@
         var vm = this;
         vm.showModal = showModal;
         vm.closeModal = closeModal;
-        
+
         ///////////////////
-        
+
         ionic.Platform.ready(function() {
             FileFactory.load();
             vm.images = FileFactory.images;
         });
-        
+
         $ionicModal.fromTemplateUrl("image-modal.html", {
             scope: $scope,
             animation: 'slide-in-up'
         })
-        .then(function sucessoModal(modal){
+            .then(sucessoModal);
+
+        function sucessoModal(modal) {
             vm.modal = modal;
-        });
-        
-        function showModal(image){
+        }
+
+        function showModal(image) {
             vm.imageModal = image;
             vm.modal.show();
         }
 
-        function closeModal(){
+        function closeModal() {
             vm.modal.hide();
         }
     }
@@ -349,8 +358,8 @@
         .module('starter')
         .controller('CameraController', CameraController);
 
-    CameraController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'PopupService'];
-    function CameraController(CameraFactory, ImageFilterFactory, FileFactory, PopupService) {
+    CameraController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'PopupService', '$ionicTabsDelegate'];
+    function CameraController(CameraFactory, ImageFilterFactory, FileFactory, PopupService, $ionicTabsDelegate) {
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
@@ -366,10 +375,12 @@
 
         function sucessoGetFoto(imageData) {
             vm.foto = "data:image/jpeg;base64," + imageData;
+            ImageFilterFactory.applyFilter('fotoImage', 0);
         }
 
         function erroGetFoto(err) {
             console.error(err);
+            redirectToTabHome();
         }
 
         function onFilter(option) {
@@ -378,14 +389,7 @@
 
         function onSave() {
             var canvas = document.getElementById("fotoImage"),
-                dataUrl;
-
-            if (typeof (canvas.toDataURL) === 'undefined') {
-                dataUrl = vm.foto;
-            }
-            else {
                 dataUrl = canvas.toDataURL();
-            }
 
             FileFactory
                 .save(dataUrl)
@@ -393,11 +397,17 @@
         }
 
         function sucessoSave() {
-            PopupService.alert("Foto salva com sucesso!");
+            PopupService.alert("Foto salva com sucesso!")
+                .then(redirectToTabHome);
         }
 
         function erroSave() {
-            PopupService.alert("Não foi possível salvar a foto!");
+            PopupService.alert("Não foi possível salvar a foto!")
+                .then(redirectToTabHome);
+        }
+
+        function redirectToTabHome() {
+            $ionicTabsDelegate.select(0);
         }
     }
 })();
@@ -409,8 +419,8 @@
         .module('starter')
         .controller('GalleryController', GalleryController);
 
-    GalleryController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'PopupService'];
-    function GalleryController(CameraFactory, ImageFilterFactory, FileFactory, PopupService) {
+    GalleryController.$inject = ['CameraFactory', 'ImageFilterFactory', 'FileFactory', 'PopupService', '$ionicTabsDelegate'];
+    function GalleryController(CameraFactory, ImageFilterFactory, FileFactory, PopupService, $ionicTabsDelegate) {
         var vm = this;
         vm.foto = null;
         vm.onTabSelect = onTabSelect;
@@ -427,10 +437,12 @@
         function sucessoGetFoto(imageData) {
             delete vm.foto;
             vm.foto = "data:image/jpeg;base64," + imageData;
+            ImageFilterFactory.applyFilter('galleryImage', 0);
         }
 
         function erroGetFoto(err) {
             console.error(err);
+            redirectToTabHome();
         }
 
         function onFilter(option) {
@@ -439,27 +451,25 @@
 
         function onSave() {
             var canvas = document.getElementById("galleryImage"),
-                dataUrl;
-
-            if (typeof (canvas.toDataURL) === 'undefined') {
-                dataUrl = vm.foto;
-            }
-            else {
                 dataUrl = canvas.toDataURL();
-            }
 
             FileFactory
                 .save(dataUrl)
                 .then(sucessoSave, erroSave);
-
         }
 
         function sucessoSave() {
-            PopupService.alert("Foto salva com sucesso!");
+            PopupService.alert("Foto salva com sucesso!")
+                .then(redirectToTabHome);;
         }
 
         function erroSave(err) {
-            PopupService.alert("Não foi possível salvar a foto!");
+            PopupService.alert("Não foi possível salvar a foto!")
+                .then(redirectToTabHome);;
+        }
+
+        function redirectToTabHome() {
+            $ionicTabsDelegate.select(0);
         }
     }
 })();
