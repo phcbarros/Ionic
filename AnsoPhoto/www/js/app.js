@@ -320,6 +320,7 @@
     ToastService.$inject = ['ionicToast', '$q', '$timeout'];
     function ToastService(ionicToast, $q, $timeout) {
         this.show = show;
+        this.hide = hide;
 
         ////////////////
 
@@ -345,6 +346,10 @@
             };
 
             return angular.extend({}, config, options);
+        }
+        
+        function hide(){
+            ionicToast.hide();
         }
     }
 })();
