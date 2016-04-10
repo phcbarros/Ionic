@@ -3,15 +3,19 @@
     width: 100%;
 }
 
-.button-clear.ion-heart{
+.button-clear.ion-heart {
     color: #ff0000;
 }
 
-.transparent{
+.transparent {
     background: transparent !important;
 }
 
-.pane.transparent{
+.pane.transparent {
     width: 80%;
     margin: 0 auto;
+}
+
+ion-pane > div.item.item-image.transparent {
+    max-height: 80%;
 }

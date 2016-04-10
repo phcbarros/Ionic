@@ -6,11 +6,9 @@
     // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
     // the 2nd parameter is an array of 'requires'
     angular.module('starter', ['ionic', 'ngCordova', 'ionic-toast'])
-
         .config(function($ionicConfigProvider) {
             $ionicConfigProvider.tabs.position('bottom');
         })
-
         .run(function($ionicPlatform) {
             $ionicPlatform.ready(function() {
                 if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -174,6 +172,11 @@
 (function() {
     'use strict';
 
+    function Imagem(dataUrl, name) {
+        this.dataUrl = dataUrl;
+        this.name = name;
+    }
+
     angular
         .module('starter')
         .factory('FileFactory', FileFactory);
@@ -188,7 +191,8 @@
             save: save,
             load: load,
             fileNames: fileNames,
-            images: images
+            images: images,
+            remove: remove
         };
 
         return service;
@@ -206,7 +210,7 @@
 
                 function sucessoWriteFile(result) {
                     console.log("sucesso save");
-                    images.push(dataUrl);
+                    images.push(new Imagem(dataUrl, name));
                     fileNames.push(name);
                     saveFileNames(fileNames);
                     defer.resolve(result);
@@ -248,7 +252,7 @@
                     openImage(fileNames[i], sucessoOpenImage);
 
                     function sucessoOpenImage(dataUrl) {
-                        images.push(dataUrl);
+                        images.push(new Imagem(dataUrl, fileNames[i]));
                     }
 
                 })(i, fileNames);
@@ -256,7 +260,6 @@
         }
 
         function openImage(name, success) {
-
             (function(name, success) {
                 $cordovaFile
                     .readAsText(cordova.file.externalApplicationStorageDirectory, name)
@@ -271,6 +274,35 @@
                 }
             })(name, success);
         }
+
+        function remove(name) {
+            var defer = $q.defer();
+
+            $cordovaFile.removeFile(cordova.file.externalApplicationStorageDirectory, name)
+                .then(sucessoRemoveFile)
+                .catch(erroRemoveFile);
+
+            function sucessoRemoveFile(result) {
+                var fileNames = loadFileNames();
+
+                fileNames = _.filter(fileNames, function(file) {
+                    return file !== name;
+                });
+
+                console.log("sucesso delete", result);
+                saveFileNames(fileNames);
+                defer.resolve(name);
+            }
+
+            function erroRemoveFile(err) {
+                console.log("erro", err);
+                defer.reject(err);
+            }
+
+            return defer.promise;
+        }
+
+
     }
 })();
 
@@ -298,7 +330,6 @@
                         type: "button-positive",
                         onTap: function alertOnTab() {
                             defer.resolve();
-
                         }
                     }
                 ]
@@ -347,8 +378,8 @@
 
             return angular.extend({}, config, options);
         }
-        
-        function hide(){
+
+        function hide() {
             ionicToast.hide();
         }
     }
@@ -362,17 +393,25 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = ['FileFactory', '$ionicModal', '$scope', 'ToastService'];
-    function HomeController(FileFactory, $ionicModal, $scope, ToastService) {
+    function HomeController(FileFactory, $ionicModal, $scope, ToastService, $ionicTabsDelegate) {
         var vm = this;
         vm.showModal = showModal;
         vm.closeModal = closeModal;
+        vm.deleteImage = deleteImage;
+
+        init();
 
         ///////////////////
 
-        ionic.Platform.ready(function() {
+        function init() {
+            ionic.Platform.ready(ready);
+        }
+
+        function ready() {
+            console.log('init');
             FileFactory.load();
             vm.images = FileFactory.images;
-        });
+        }
 
         $ionicModal.fromTemplateUrl("image-modal.html", {
             scope: $scope,
@@ -391,6 +430,27 @@
 
         function closeModal() {
             vm.modal.hide();
+        }
+
+        function deleteImage(image) {
+            console.log(image);
+            FileFactory.remove(image.name)
+                .then(sucessoDeleteImage)
+                .catch(erroDeleteImage);
+        }
+
+        function sucessoDeleteImage(name) {
+            ToastService.show({ message: 'Foto excluída com sucesso!', position: 'middle', stick: false, time: 1000 })
+                .then(function() {
+                    closeModal();
+                    vm.images = _.filter(vm.images, function(image) {
+                        return image.name !== name;
+                    });
+                });
+        }
+
+        function erroDeleteImage(err) {
+            ToastService.show({ message: 'Não foi possível excluir a foto!', position: 'middle' });
         }
 
     }
@@ -443,7 +503,7 @@
         }
 
         function sucessoSave() {
-            ToastService.show({ message: "Foto salva com sucesso!", position: "middle", stick: false, time:  1000 })
+            ToastService.show({ message: "Foto salva com sucesso!", position: "middle", stick: false, time: 1000 })
                 .then(redirectToTabHome);
         }
 
